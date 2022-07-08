@@ -7,7 +7,6 @@ function useData(defaultValue) {
   const [data, setData] = useState(defaultValue);
   const [loading, setLoading] = useState(false);
   console.log(loading);
-
   useEffect(() => {
     setLoading(true);
     fetch('https://swapi-trybe.herokuapp.com/api/planets/')
@@ -24,12 +23,26 @@ function useData(defaultValue) {
   return data;
 }
 
+const NO_RESULT = -1;
+
 function App() {
   const data = useData([]);
   const [loading] = useState();
+  const [filterKey, setFilterKey] = useState('');
   console.log(data);
+  const nameFilter = (filterKey === '')
+    ? data
+    : data.filter((planet) => planet.name.toLocaleLowerCase()
+      .search(filterKey.toLocaleLowerCase()) !== NO_RESULT);
+  console.log(nameFilter);
+
+  const handleType = ({ target }) => {
+    setFilterKey(target.value);
+  };
+
   return (
     <DataProvider>
+      <input value={ filterKey } onChange={ handleType } data-testid="name-filter" />
       {loading ? (
         <h1>Loading</h1>
       ) : (
@@ -52,7 +65,7 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {data.map(((planet) => (
+            {nameFilter.map(((planet) => (
               <tr key={ planet.name }>
                 <td>{planet.name}</td>
                 <td>{planet.rotation_period}</td>

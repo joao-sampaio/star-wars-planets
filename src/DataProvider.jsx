@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 const DataContext = createContext([]);
 
 const DataProvider = ({ children }) => {
-  const data = [];
+  const data = { filterByName: { name: '' } };
   return (
     <DataContext.Provider value={ data }>
       {children}
@@ -15,7 +15,7 @@ const DataProvider = ({ children }) => {
 };
 
 DataProvider.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.arrayOf(PropTypes.element).isRequired,
 };
 
 export default DataProvider;
