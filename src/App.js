@@ -35,11 +35,10 @@ function App() {
   const [filter, setFilter] = useState({
     column: 'population',
     comparison: 'maior que',
-    value: '',
+    value: 0,
   });
 
-  const [planets] = useState([]);
-  console.log(planets);
+  // const [planets] = useState([]);
 
   const handleType = ({ target }) => {
     setFilterKey(target.value);
@@ -48,6 +47,7 @@ function App() {
   };
 
   const handleFilter = ({ target }) => {
+    console.log(target.value);
     if (target.value !== '') {
       const newFilter = { ...filter };
       newFilter[target.name] = target.value;
@@ -67,17 +67,20 @@ function App() {
   };
 
   const addFilter = () => {
-    console.log(getColumns());
+    // console.log(getColumns());
     if (getColumns().length >= 1) {
       const temp = filter;
-      console.log(temp);
+      if (temp.value.length > 1) {
+        temp.value = temp.value.slice(0, temp.value.length - 1);
+      }
+      // console.log(temp);
       filterByNumericValues.push(temp);
-      console.log(filterByNumericValues, 'dsgsfd');
+      // console.log(filterByNumericValues, 'dsgsfd');
       // getFilteredData()
       setFilter({
         column: getColumns()[0],
         comparison: 'maior que',
-        value: '',
+        value: 0,
       });
     }
   };
@@ -97,7 +100,7 @@ function App() {
     setFilter({
       column: getColumns()[0],
       comparison: 'maior que',
-      value: '',
+      value: 0,
     });
   };
   const removeAllFilters = () => {
@@ -107,7 +110,7 @@ function App() {
     setFilter({
       column: getColumns()[0],
       comparison: 'maior que',
-      value: '',
+      value: 0,
     });
   };
 
@@ -117,19 +120,22 @@ function App() {
       : data.filter((planet) => planet.name.toLocaleLowerCase()
         .search(filterKey.toLocaleLowerCase()) !== NO_RESULT);
     let temp = [...nameFilter];
-    console.log(temp);
     filterByNumericValues.map((f) => {
+      console.log('enter');
       temp = temp.filter((planet) => {
+        console.log('in');
         if (f.comparison === 'maior que') {
+          console.log('maior que');
           return parseInt(planet[f.column], 10) > parseInt(f.value, 10);
         } if (f.comparison === 'menor que') {
           return parseInt(planet[f.column], 10) < parseInt(f.value, 10);
         }
         return parseInt(planet[f.column], 10) === parseInt(f.value, 10);
       });
+      console.log('out');
       return 0;
     });
-    console.log(temp, 'getfilteredData');
+    // console.log(temp, 'getfilteredData');
     // setPlanets(temp)
     return temp;
   };
