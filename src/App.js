@@ -35,31 +35,80 @@ function App() {
   const [filter, setFilter] = useState({
     column: 'population',
     comparison: 'maior que',
-    value: 0,
+    value: '',
   });
 
-  const [setPlanets] = useState([]);
+  const [planets] = useState([]);
+  console.log(planets);
 
   const handleType = ({ target }) => {
     setFilterKey(target.value);
     // getFilteredData()
-    setPlanets(temp);
+    // setPlanets();
   };
 
   const handleFilter = ({ target }) => {
-    console.log(target.name, target.value);
-    const newFilter = { ...filter };
-    newFilter[target.name] = target.value;
-    setFilter(newFilter);
+    if (target.value !== '') {
+      const newFilter = { ...filter };
+      newFilter[target.name] = target.value;
+      setFilter(newFilter);
+    }
+  };
+
+  const getColumns = () => {
+    const columns = ['population', 'orbital_period',
+      'diameter', 'rotation_period', 'surface_water'];
+    filterByNumericValues.map((f) => {
+      const index = columns.indexOf(f.column);
+      columns.splice(index, 1);
+      return 0;
+    });
+    return columns;
   };
 
   const addFilter = () => {
-    const temp = filter;
-    console.log(temp);
-    filterByNumericValues.push(temp);
-    console.log(filterByNumericValues, 'dsgsfd');
-    // getFilteredData()
-    setPlanets(temp);
+    console.log(getColumns());
+    if (getColumns().length >= 1) {
+      const temp = filter;
+      console.log(temp);
+      filterByNumericValues.push(temp);
+      console.log(filterByNumericValues, 'dsgsfd');
+      // getFilteredData()
+      setFilter({
+        column: getColumns()[0],
+        comparison: 'maior que',
+        value: '',
+      });
+    }
+  };
+
+  const removeFilter = ({ target }) => {
+    let index = 0;
+    let remove = 0;
+    const column = target.name;
+    filterByNumericValues.map((f) => {
+      if (f.column === column) {
+        remove = index;
+      }
+      index += 1;
+      return 0;
+    });
+    filterByNumericValues.splice(remove, 1);
+    setFilter({
+      column: getColumns()[0],
+      comparison: 'maior que',
+      value: '',
+    });
+  };
+  const removeAllFilters = () => {
+    for (let i = 0; i <= filterByNumericValues.length + 1; i += 1) {
+      filterByNumericValues.pop();
+    }
+    setFilter({
+      column: getColumns()[0],
+      comparison: 'maior que',
+      value: '',
+    });
   };
 
   const getFilteredData = () => {
@@ -80,7 +129,7 @@ function App() {
       });
       return 0;
     });
-    console.log(temp);
+    console.log(temp, 'getfilteredData');
     // setPlanets(temp)
     return temp;
   };
@@ -93,17 +142,19 @@ function App() {
       {/* population, orbital_period,
        diameter, rotation_period e surface_water */}
       <div>
-        <select onChange={ handleFilter } name="column" data-testid="column-filter">
-          <option>population</option>
-          <option>orbital_period</option>
-          <option>diameter</option>
-          <option>rotation_period</option>
-          <option>surface_water</option>
+        <select
+          value={ filter.column }
+          onChange={ handleFilter }
+          name="column"
+          data-testid="column-filter"
+        >
+          {getColumns().map((c) => <option key={ c }>{c}</option>)}
         </select>
         <select
           onChange={ handleFilter }
           name="comparison"
           data-testid="comparison-filter"
+          value={ filter.comparison }
         >
           <option>maior que</option>
           <option>menor que</option>
@@ -122,6 +173,23 @@ function App() {
           data-testid="button-filter"
         >
           Filtrar
+        </button>
+      </div>
+      <div>
+        {filterByNumericValues.map((f) => (
+          <div data-testid="filter" key={ f.column }>
+            <spam>{f.column}</spam>
+            <spam>{f.comparison}</spam>
+            <spam>{f.value}</spam>
+            <button onClick={ removeFilter } name={ f.column } type="button">X</button>
+          </div>
+        ))}
+        <button
+          onClick={ removeAllFilters }
+          type="button"
+          data-testid="button-remove-filters"
+        >
+          Remove All
         </button>
       </div>
       {loading ? (
