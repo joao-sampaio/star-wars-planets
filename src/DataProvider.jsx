@@ -1,12 +1,15 @@
-import React, { createContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-// import DataContext from './DataContext';
+import DataContext from './DataContext';
 // import  from 'react';
 
-const DataContext = createContext([]);
+// export const DataContext = createContext();
 
 const DataProvider = ({ children }) => {
-  const data = { filterByName: { name: '' } };
+  const data = {
+    filterByName: { name: '' },
+    filterByNumericValues: [],
+  };
   return (
     <DataContext.Provider value={ data }>
       {children}

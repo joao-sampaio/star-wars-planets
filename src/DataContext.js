@@ -1,5 +1,8 @@
-// import { createContext } from 'react';
+import { createContext } from 'react';
 
-// // const DataContext = createContext([]);
+const DataContext = createContext({
+  filterByName: { name: '' },
+  filterByNumericValues: [],
+});
 
-// export default DataContext = createContext([]);
+export default DataContext;
