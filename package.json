@@ -1,7 +1,8 @@
 {
-  "name": "sd-0x-project-react-context-hooks-starwars-datatable-filters",
+  "name": "starwars-datatable-filters",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "engines": {
     "node": "18"
   },
