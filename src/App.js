@@ -5,9 +5,7 @@ import DataContext from './DataContext';
 
 function useData(defaultValue) {
   const [data, setData] = useState(defaultValue);
-  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    setLoading(true);
     // Old api:
     // fetch('https://swapi-trybe.herokuapp.com/api/planets/')
     // New api:
@@ -19,7 +17,6 @@ function useData(defaultValue) {
           return planetData;
         });
         setData(infos);
-        setLoading(false);
       });
   }, []);
   return data;

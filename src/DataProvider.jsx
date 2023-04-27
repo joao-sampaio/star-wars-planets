@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DataContext from './DataContext';
-// import  from 'react';
-
-// export const DataContext = createContext();
 
 const DataProvider = ({ children }) => {
   const data = {
