@@ -104,6 +104,11 @@ function App() {
     });
   };
 
+  const gt = (a, b) => a > b;
+  const lt = (a, b) => a < b;
+  const eq = (a, b) => a === b;
+  const comp = { 'maior que': gt, 'menor que': lt, 'igual a': eq };
+
   const getFilteredData = () => {
     const nameFilter = (filterKey === '')
       ? data
@@ -112,12 +117,8 @@ function App() {
     let temp = [...nameFilter];
     filterByNumericValues.map((f) => {
       temp = temp.filter((planet) => {
-        if (f.comparison === 'maior que') {
-          return parseInt(planet[f.column], 10) > parseInt(f.value, 10);
-        } if (f.comparison === 'menor que') {
-          return parseInt(planet[f.column], 10) < parseInt(f.value, 10);
-        }
-        return parseInt(planet[f.column], 10) === parseInt(f.value, 10);
+        const p = parseInt(planet[f.column], 10);
+        return comp[f.comparison](p, parseInt(f.value, 10));
       });
       return 0;
     });
