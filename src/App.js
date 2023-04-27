@@ -6,10 +6,12 @@ import DataContext from './DataContext';
 function useData(defaultValue) {
   const [data, setData] = useState(defaultValue);
   const [loading, setLoading] = useState(false);
-  console.log(loading);
   useEffect(() => {
     setLoading(true);
-    fetch('https://swapi-trybe.herokuapp.com/api/planets/')
+    // Old api:
+    // fetch('https://swapi-trybe.herokuapp.com/api/planets/')
+    // New api:
+    fetch('https://swapi.dev/api/planets/')
       .then((response) => response.json())
       .then((result) => {
         const infos = result.results.map((planetData) => {
@@ -38,16 +40,11 @@ function App() {
     value: 0,
   });
 
-  // const [planets] = useState([]);
-
   const handleType = ({ target }) => {
     setFilterKey(target.value);
-    // getFilteredData()
-    // setPlanets();
   };
 
   const handleFilter = ({ target }) => {
-    console.log(target.value);
     if (target.value !== '') {
       const newFilter = { ...filter };
       newFilter[target.name] = target.value;
@@ -67,16 +64,12 @@ function App() {
   };
 
   const addFilter = () => {
-    // console.log(getColumns());
     if (getColumns().length >= 1) {
       const temp = filter;
       if (temp.value.length > 1) {
         temp.value = temp.value.slice(0, temp.value.length - 1);
       }
-      // console.log(temp);
       filterByNumericValues.push(temp);
-      // console.log(filterByNumericValues, 'dsgsfd');
-      // getFilteredData()
       setFilter({
         column: getColumns()[0],
         comparison: 'maior que',
@@ -121,32 +114,22 @@ function App() {
         .search(filterKey.toLocaleLowerCase()) !== NO_RESULT);
     let temp = [...nameFilter];
     filterByNumericValues.map((f) => {
-      console.log('enter');
       temp = temp.filter((planet) => {
-        console.log('in');
         if (f.comparison === 'maior que') {
-          console.log('maior que');
           return parseInt(planet[f.column], 10) > parseInt(f.value, 10);
         } if (f.comparison === 'menor que') {
           return parseInt(planet[f.column], 10) < parseInt(f.value, 10);
         }
         return parseInt(planet[f.column], 10) === parseInt(f.value, 10);
       });
-      console.log('out');
       return 0;
     });
-    // console.log(temp, 'getfilteredData');
-    // setPlanets(temp)
     return temp;
   };
-
-  // const filteredData = getFilteredData()
 
   return (
     <DataProvider>
       <input value={ filterKey } onChange={ handleType } data-testid="name-filter" />
-      {/* population, orbital_period,
-       diameter, rotation_period e surface_water */}
       <div>
         <select
           value={ filter.column }
@@ -184,9 +167,9 @@ function App() {
       <div>
         {filterByNumericValues.map((f) => (
           <div data-testid="filter" key={ f.column }>
-            <spam>{f.column}</spam>
-            <spam>{f.comparison}</spam>
-            <spam>{f.value}</spam>
+            <text>{f.column}</text>
+            <text>{f.comparison}</text>
+            <text>{f.value}</text>
             <button onClick={ removeFilter } name={ f.column } type="button">X</button>
           </div>
         ))}
